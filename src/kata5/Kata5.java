@@ -2,25 +2,21 @@ package kata5;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
-import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.PreparedStatement;
 
 public class Kata5 {
     private Connection connection;
 
-    private static void selectDATA_PEOPLE(Connection connection) {
-        String SQL = "SELECT * FROM PEOPLE";
+    private static void insertDATA_PEOPLE(Connection connection) {
+        String SQL = "INSERT INTO PEOPLE(ID, NAME, APELLIDOS, DEPARTAMENTOS) VALUES(?, ?, ?, ?)";
         try{
-            Statement statement = connection.createStatement();
-            ResultSet resultset = statement.executeQuery(SQL);
-            System.out.println("ID \t NAME \t APELLIDOS \t DEPARTAMENTOS");
-            while(resultset.next()) {
-                System.out.println(resultset.getInt("ID") + " \t " +
-                        resultset.getString("NAME") + " \t " +
-                        resultset.getString("APELLIDOS") + " \t " +
-                        resultset.getInt("DEPARTAMENTOS") + " \t ");
-            }
+            PreparedStatement preparedstatement = connection.PreparedStatement(SQL);
+            preparedstatement.setInt(1, 23);
+            preparedstatement.setString(2, "Juan");
+            preparedstatement.setString(3, "Quesada");
+            preparedstatement.setString(4, "Compras");
+           
         }
         catch (SQLException exception) {
             System.out.println("ERROR Kata5::connect (SQLException)  " + exception.getMessage());
@@ -39,6 +35,7 @@ public class Kata5 {
             connection = DriverManager.getConnection(URL_BD_SQLite);
             System.out.println("Base de Datos conectada...");
             selectDATA_PEOPLE(connection);
+            insertDATA_PEOPLE(connection);
         }
         catch (SQLException exception) {
             System.out.println("ERROR Kata5::connect (SQLException)  " + exception.getMessage());
